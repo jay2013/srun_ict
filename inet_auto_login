@@ -1,0 +1,25 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: hedongjie@ict.ac.cn
+# Required-Start: $network $remote_fs $syslog $time
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: ict internet auto login script 
+### END INIT INFO
+username="hedongjie"
+password="jay508615"
+while [ $(ping -c1 159.226.39.22  | grep transmitted | awk '{print $4}') -eq 0 ] 
+do
+	continue
+done
+while [ $(ping -c1 www.baidu.com  | grep transmitted | awk '{print $4}') -eq 0 ]
+do
+	srun_ict login ${username} ${password} 
+done
+if [ $(ping -c1 www.jd.com  | grep transmitted | awk '{print $4}') -eq 0 ]
+then
+	echo "failed!"
+else
+	echo "success!"
+fi

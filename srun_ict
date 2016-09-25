@@ -1,0 +1,79 @@
+#!/usr/bin/python
+'''
+srun_ict is a tool that enable you access network through command line. if you are also a linux/unix depth lover or often work on a linux/unix sever withoutfriendly user interface, this tool will be very helpful for you.
+contact: hedongjie@ict.ac.cn
+'''
+import urllib
+import urllib2
+import hashlib
+import sys
+import re
+
+# login 
+def login(username, password):
+    url="http://159.226.39.22/cgi-bin/do_login"
+    post_data = {}
+    post_data['username'] = username
+    m = hashlib.md5()
+    m.update(password)
+    psw = m.hexdigest()
+    post_data['password'] = psw[8:24]
+    post_data['drop'] = 0
+    post_data['type'] = 1
+    post_data['n'] = 100
+    post_str = urllib.urlencode(post_data)
+    req = urllib2.urlopen(url, post_str)
+    return req.read()
+
+# logout
+def logout(username, password):
+    url="http://159.226.39.22/cgi-bin/do_logout"
+    post_data = {}
+    post_data['username'] = username 
+    post_data['password'] = password
+    post_data['drop'] = 0
+    post_data['type'] = 1
+    post_data['n'] = 1
+    post_str = urllib.urlencode(post_data)
+    fullurl = url+"?"+post_str
+    req = urllib2.urlopen(fullurl)
+    return req.read()
+
+def usage():
+    sys.stdout.write("usage:\n\t" + sys.argv[0] + " [login|logout] [username] [password]\n")
+
+def main(argv):
+    username = "hedongjie"
+    password = "123456"
+    cmd = "login"
+    if len(argv) == 2:
+        cmd = sys.argv[1]
+    elif len(argv) == 3:
+        cmd = sys.argv[1]
+        username = sys.argv[2]
+    elif len(argv) == 4:
+        cmd = sys.argv[1]
+        username = sys.argv[2]
+        password = sys.argv[3]
+    else:
+        usage()
+        return 1
+    if cmd == "login":
+        rsp = login(username, password)
+        pattern = re.compile("^[\d]+$")
+        ms = pattern.match(rsp)
+        if ms is not None:
+            print ms.group(0)
+            sys.stdout.write("login success!\n")
+        else:
+            sys.stdout.write(rsp + "\n")
+    elif cmd == "logout":
+        rsp = logout(username, password)
+        sys.stdout.write(rsp + "\n")
+    else:
+        usage()
+        return 1
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
