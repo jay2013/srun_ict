@@ -13,13 +13,18 @@ while [ $(ping -c1 159.226.39.22  | grep transmitted | awk '{print $4}') -eq 0 ]
 do
 	continue
 done
-while [ $(ping -c1 www.baidu.com  | grep transmitted | awk '{print $4}') -eq 0 ]
+while [ 1 ]
 do
-	srun_ict login ${username} ${password} 
+    if [ $(ping -c1 www.baidu.com  | grep transmitted | awk '{print $4}') -eq 0 ] 
+    then
+	    srun_ict login ${username} ${password}
+    else
+        sleep 1m        
+    fi
 done
-if [ $(ping -c1 www.jd.com  | grep transmitted | awk '{print $4}') -eq 0 ]
-then
-	echo "failed!"
-else
-	echo "success!"
-fi
+# if [ $(ping -c1 www.jd.com  | grep transmitted | awk '{print $4}') -eq 0 ]
+# then
+#     echo "failed!"
+# else
+#     echo "success!"
+# fi
