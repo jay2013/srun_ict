@@ -22,5 +22,5 @@ to login or logout.
 
 # What can you contribute to this project?
 * Fix potential bugs.
-* Make it more userfriendlly.
+* Make it more userfriendly.
 * Adapt it to more OS(we only test it on Ubuntu16.04).
