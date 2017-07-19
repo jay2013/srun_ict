@@ -1,4 +1,6 @@
 #!/bin/sh
+# This script is used to automatically connect the ICT Gateway after your Linux system startting up. 
+
 ### BEGIN INIT INFO
 # Provides: hedongjie@ict.ac.cn
 # Required-Start: $network $remote_fs $syslog $time
@@ -8,7 +10,7 @@
 # Short-Description: ict internet auto login script 
 ### END INIT INFO
 username="hedongjie"
-password="jay508615"
+password="123456"
 while [ $(ping -c1 159.226.39.22  | grep transmitted | awk '{print $4}') -eq 0 ] 
 do
 	continue
