@@ -9,31 +9,36 @@ import hashlib
 import sys
 import re
 
-# login 
+# login
 def login(username, password):
-    url="http://159.226.39.22/cgi-bin/do_login"
+    url="http://159.226.39.22/srun_portal_pc.php?ac_id=1&"
     post_data = {}
     post_data['username'] = username
-    m = hashlib.md5()
-    m.update(password)
-    psw = m.hexdigest()
-    post_data['password'] = psw[8:24]
+    #  m = hashlib.md5()
+    #  m.update(password)
+    #  psw = m.hexdigest()
+    post_data['action'] = "login"
+    post_data['ac_id'] = 1
+    post_data['password'] = password
     post_data['drop'] = 0
     post_data['type'] = 1
     post_data['n'] = 100
+    post_data['ajax']=1
     post_str = urllib.urlencode(post_data)
     req = urllib2.urlopen(url, post_str)
     return req.read()
 
 # logout
 def logout(username, password):
-    url="http://159.226.39.22/cgi-bin/do_logout"
+    url="http://159.226.39.22/srun_portal_pc.php?ac_id=1&"
     post_data = {}
-    post_data['username'] = username 
+    post_data['action']="logout"
+    post_data['username'] = username
     post_data['password'] = password
     post_data['drop'] = 0
     post_data['type'] = 1
     post_data['n'] = 1
+    post_data['ajax']=1
     post_str = urllib.urlencode(post_data)
     fullurl = url+"?"+post_str
     req = urllib2.urlopen(fullurl)
@@ -60,7 +65,7 @@ def main(argv):
         return 1
     if cmd == "login":
         rsp = login(username, password)
-        pattern = re.compile("^[\d]+$")
+        pattern = re.compile("^login_ok")
         ms = pattern.match(rsp)
         if ms is not None:
             print ms.group(0)
